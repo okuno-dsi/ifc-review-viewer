@@ -1,0 +1,29 @@
+{
+  "name": "ifc-review-viewer",
+  "version": "0.1.0",
+  "description": "A browser-only WebGL IFC viewer and review tool.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "http-server . -p 8080 -c-1",
+    "build": "npm run build:vendor && npm run build:standalone",
+    "build:vendor": "node scripts/build-vendor.mjs",
+    "build:standalone": "node scripts/build-standalone.mjs"
+  },
+  "keywords": [
+    "ifc",
+    "bim",
+    "webgl",
+    "viewer",
+    "review"
+  ],
+  "dependencies": {
+    "three": "0.149.0",
+    "web-ifc": "0.0.39",
+    "web-ifc-three": "0.0.125"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.5",
+    "http-server": "14.1.1"
+  }
+}

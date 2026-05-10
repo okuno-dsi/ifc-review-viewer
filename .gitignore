@@ -1,0 +1,59 @@
+# Dependencies
+node_modules/
+
+# Local OS/editor files
+.DS_Store
+Thumbs.db
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Logs and caches
+*.log
+*.tmp
+*.bak
+dist/
+.vite/
+.cache/
+
+# Archives and packaged binaries
+*.zip
+*.7z
+*.rar
+*.exe
+*.dll
+*.pdb
+*.so
+*.dylib
+*.a
+*.lib
+*.obj
+
+# BIM / CAD / project data
+# Do not publish copyrighted model data in the source repository.
+*.ifc
+*.ifczip
+*.rvt
+*.rfa
+*.rte
+*.rft
+*.nwd
+*.nwc
+*.dwg
+*.dxf
+
+# Office / document files that may contain project information
+*.pdf
+*.xls
+*.xlsx
+*.xlsm
+*.doc
+*.docx
+*.ppt
+*.pptx
+
+# Local review exports
+*-comments.json
+*-review.ifc

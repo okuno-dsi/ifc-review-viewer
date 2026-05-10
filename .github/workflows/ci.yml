@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Audit dependencies
+        run: npm audit --audit-level=high
+
+      - name: Build
+        run: npm run build
+
+      - name: Check source syntax
+        run: node --check app.js
+
+      - name: Check blocked project file types
+        run: |
+          if git ls-files | grep -Ei '\.(ifc|ifczip|rvt|rfa|rte|rft|nwd|nwc|dwg|dxf|pdf|xls|xlsx|doc|docx|ppt|pptx|zip|7z|rar)$'; then
+            echo "Blocked project or archive file detected in tracked files."
+            exit 1
+          fi

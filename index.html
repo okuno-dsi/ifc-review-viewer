@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IFC Review Viewer</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark">IFC</div>
+        <div>
+          <h1>IFC Review Viewer</h1>
+          <p id="fileSummary" data-i18n="summary.noIfc">IFC ファイルを読み込んでください</p>
+        </div>
+      </div>
+      <div class="toolbar">
+        <label class="file-button">
+          <input id="ifcFileInput" type="file" accept=".ifc,application/octet-stream" multiple>
+          <span data-i18n="ui.addIfc">IFC を追加</span>
+        </label>
+        <button id="fitButton" type="button" disabled data-i18n="ui.fit">全体表示</button>
+        <button id="toggleCommentHighlightButton" type="button" disabled data-i18n="ui.commentElements">コメント要素</button>
+        <button id="exportCommentsButton" type="button" disabled data-i18n="ui.exportComments">コメント書出</button>
+        <button id="exportCommentedIfcButton" type="button" disabled data-i18n="ui.exportCommentedIfc">コメント埋込IFC書出</button>
+        <label class="file-button secondary">
+          <input id="importCommentsInput" type="file" accept="application/json,.json">
+          <span data-i18n="ui.importComments">コメント読込</span>
+        </label>
+        <button id="clearModelsButton" type="button" disabled data-i18n="ui.clear">全消去</button>
+        <button class="popout-toggle" type="button" data-popout-target="models" data-i18n="ui.ifc">IFC</button>
+        <button class="popout-toggle" type="button" data-popout-target="filters" data-i18n="ui.displaySettings">表示設定</button>
+        <button class="popout-toggle" type="button" data-popout-target="clip" data-i18n="ui.clip">クリップ</button>
+        <button class="popout-toggle" type="button" data-popout-target="review" data-i18n="ui.review">レビュー</button>
+        <label class="language-switch">
+          <span data-i18n="ui.language">言語</span>
+          <select id="languageSelect" aria-label="言語" data-i18n-aria-label="ui.language">
+            <option value="ja" data-i18n="ui.japanese">日本語</option>
+            <option value="en" data-i18n="ui.english">English</option>
+          </select>
+        </label>
+      </div>
+    </header>
+
+    <main class="viewer-panel" id="dropZone">
+      <canvas id="viewerCanvas"></canvas>
+      <div id="emptyState" class="empty-state">
+        <h2 data-i18n="empty.title">IFC ファイルをドロップまたは選択</h2>
+        <p data-i18n="empty.body">要素をクリックすると属性確認とコメント保存ができます。</p>
+      </div>
+      <div id="statusBar" class="status-bar" data-i18n="status.idle">待機中</div>
+      <section class="floating-selection-pane">
+        <h2 data-i18n="panel.selection">選択要素</h2>
+        <div id="selectionSummary" class="selection-summary empty" data-i18n="selection.none">未選択</div>
+        <div id="propertyList" class="property-list"></div>
+      </section>
+    </main>
+
+    <aside class="side-panel">
+      <section class="panel-section popout-panel" data-popout="models">
+        <div class="section-title-row">
+          <h2 data-i18n="panel.loadedIfc">読込 IFC</h2>
+          <span id="modelCount" class="count-pill">0</span>
+        </div>
+        <div id="modelList" class="control-list empty" data-i18n="model.none">IFC は未読込です。</div>
+        <div id="activeModelSettings" class="model-settings empty" data-i18n="model.noActive">IFC を選択すると個別の表示設定を変更できます。</div>
+      </section>
+
+      <section class="panel-section popout-panel" data-popout="filters">
+        <div class="section-title-row">
+          <h2 data-i18n="panel.categories">カテゴリ表示</h2>
+          <div class="mini-actions">
+            <button id="showAllCategoriesButton" type="button" disabled data-i18n="ui.showAll">全表示</button>
+            <button id="hideAllCategoriesButton" type="button" disabled data-i18n="ui.hideAll">全非表示</button>
+          </div>
+        </div>
+        <div id="categoryList" class="control-list empty" data-i18n="filters.afterLoad">IFC 読込後に表示されます。</div>
+      </section>
+
+      <section class="panel-section popout-panel" data-popout="filters">
+        <div class="section-title-row">
+          <h2 data-i18n="panel.levels">レベル表示</h2>
+          <div class="mini-actions">
+            <button id="showAllLevelsButton" type="button" disabled data-i18n="ui.showAll">全表示</button>
+            <button id="hideAllLevelsButton" type="button" disabled data-i18n="ui.hideAll">全非表示</button>
+          </div>
+        </div>
+        <div id="levelList" class="control-list empty" data-i18n="filters.afterLoad">IFC 読込後に表示されます。</div>
+      </section>
+
+      <section class="panel-section popout-panel" data-popout="filters">
+        <h2 data-i18n="panel.displayHelpers">表示補助</h2>
+        <label class="check-row">
+          <input id="gridToggle" type="checkbox" checked>
+          <span data-i18n="display.grid">基準グリッド</span>
+        </label>
+        <label class="check-row">
+          <input id="levelToggle" type="checkbox">
+          <span data-i18n="display.levelLines">レベル線</span>
+        </label>
+      </section>
+
+      <section class="panel-section popout-panel" data-popout="filters">
+        <h2 data-i18n="panel.modelAppearance">モデル表示</h2>
+        <label class="field compact-field">
+          <span id="viewBrightnessValue">明度: 100%</span>
+          <input id="viewBrightnessRange" type="range" min="50" max="150" value="100">
+        </label>
+        <label class="field compact-field">
+          <span id="viewSaturationValue">彩度: 100%</span>
+          <input id="viewSaturationRange" type="range" min="0" max="180" value="100">
+        </label>
+        <label class="field compact-field">
+          <span data-i18n="display.background">背景色</span>
+          <input id="backgroundColorInput" type="color" value="#b8c6d0">
+        </label>
+        <button id="resetViewAppearanceButton" type="button" data-i18n="display.resetAppearance">表示をリセット</button>
+      </section>
+
+      <section class="panel-section popout-panel" data-popout="clip">
+        <h2 data-i18n="panel.clipping">クリッピング</h2>
+        <label class="check-row">
+          <input id="sectionToggle" type="checkbox">
+          <span data-i18n="clip.enabled">クリッピング表示</span>
+        </label>
+        <label class="check-row">
+          <input id="clipHandleToggle" type="checkbox" checked>
+          <span data-i18n="clip.handles">ハンドル表示</span>
+        </label>
+        <label class="field compact-field">
+          <span data-i18n="clip.mode">方式</span>
+          <select id="clipMode">
+            <option value="box" data-i18n="clip.box">ボックス</option>
+            <option value="plane" data-i18n="clip.plane">平面</option>
+          </select>
+        </label>
+        <div class="clip-rotation-row">
+          <label class="field compact-field">
+            <span data-i18n="clip.rotation">Z軸回転角</span>
+            <input id="clipRotationInput" type="number" min="-180" max="180" step="0.1" value="0" disabled>
+          </label>
+          <button id="alignClipToModelButton" type="button" disabled data-i18n="clip.align">建物方向</button>
+        </div>
+        <label class="field compact-field">
+          <span data-i18n="clip.direction">方向</span>
+          <select id="sectionAxis">
+            <option value="y" data-i18n="clip.horizontal">水平</option>
+            <option value="x" data-i18n="clip.xDirection">X 方向</option>
+            <option value="z" data-i18n="clip.zDirection">Z 方向</option>
+          </select>
+        </label>
+        <label class="field compact-field">
+          <span id="sectionValue">位置: -</span>
+          <input id="sectionRange" type="range" min="0" max="100" value="50" disabled>
+        </label>
+        <div id="clipBoxControls" class="clip-box-controls">
+          <label class="field compact-field">
+            <span id="clipXMinValue">X 最小: -</span>
+            <input id="clipXMinRange" type="range" min="0" max="100" value="0" disabled>
+          </label>
+          <label class="field compact-field">
+            <span id="clipXMaxValue">X 最大: -</span>
+            <input id="clipXMaxRange" type="range" min="0" max="100" value="100" disabled>
+          </label>
+          <label class="field compact-field">
+            <span id="clipYMinValue">Y 最小: -</span>
+            <input id="clipYMinRange" type="range" min="0" max="100" value="0" disabled>
+          </label>
+          <label class="field compact-field">
+            <span id="clipYMaxValue">Y 最大: -</span>
+            <input id="clipYMaxRange" type="range" min="0" max="100" value="100" disabled>
+          </label>
+          <label class="field compact-field">
+            <span id="clipZMinValue">Z 最小: -</span>
+            <input id="clipZMinRange" type="range" min="0" max="100" value="0" disabled>
+          </label>
+          <label class="field compact-field">
+            <span id="clipZMaxValue">Z 最大: -</span>
+            <input id="clipZMaxRange" type="range" min="0" max="100" value="100" disabled>
+          </label>
+          <button id="resetClipBoxButton" type="button" disabled data-i18n="clip.resetBox">ボックス全体</button>
+        </div>
+      </section>
+
+      <section class="panel-section comment-editor popout-panel" data-popout="review">
+        <h2 data-i18n="panel.commentEditor">コメント記入</h2>
+        <label class="field">
+          <span data-i18n="comment.author">記入者</span>
+          <input id="authorInput" type="text" autocomplete="name" placeholder="名前" data-i18n-placeholder="comment.authorPlaceholder">
+        </label>
+        <label class="field compact-field">
+          <span data-i18n="comment.scope">対象</span>
+          <select id="commentScope">
+            <option value="element" data-i18n="comment.scopeElement">選択要素</option>
+            <option value="model" data-i18n="comment.scopeModel">建物全体</option>
+            <option value="department" data-i18n="comment.scopeDepartment">部門・範囲</option>
+          </select>
+        </label>
+        <label id="departmentField" class="field compact-field is-hidden">
+          <span data-i18n="comment.department">部門・範囲名</span>
+          <input id="departmentInput" type="text" placeholder="例: 意匠 / 構造 / 設備 / 1FL" data-i18n-placeholder="comment.departmentPlaceholder">
+        </label>
+        <label class="field">
+          <span data-i18n="comment.body">コメント</span>
+          <textarea id="commentBody" rows="5" placeholder="選択した要素へのコメントを入力" data-i18n-placeholder="comment.bodyPlaceholder"></textarea>
+        </label>
+        <button id="saveCommentButton" type="button" disabled data-i18n="ui.save">保存</button>
+        <div id="commentStatus" class="inline-status"></div>
+      </section>
+
+      <section class="panel-section popout-panel" data-popout="review">
+        <div class="section-title-row">
+          <h2 data-i18n="panel.selectedComments">選択要素のコメント</h2>
+          <span id="selectedCommentCount" class="count-pill">0</span>
+        </div>
+        <div id="selectedCommentList" class="comment-list empty" data-i18n="comment.none">コメントはありません。</div>
+      </section>
+
+      <section class="panel-section all-comments popout-panel" data-popout="review">
+        <div class="section-title-row">
+          <h2 data-i18n="panel.allComments">全コメント</h2>
+          <span id="allCommentCount" class="count-pill">0</span>
+        </div>
+        <div id="allCommentList" class="comment-list empty" data-i18n="comment.none">コメントはありません。</div>
+      </section>
+    </aside>
+  </div>
+
+  <script type="module" src="./app.js"></script>
+</body>
+</html>
