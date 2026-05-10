@@ -20,6 +20,44 @@ The project is intentionally limited to browser code: no desktop plugin, protoco
 - 特定の商用ソフトを持たない関係者も BIM レビューへ参加できる
 - 将来的に、IFC 以外の変換済み BIM 表示データも同じレビュー体験で扱える
 
+## What Makes This Different
+
+IFC Review Viewer is not intended to compete with full BIM authoring tools or cloud-based CDE platforms.
+
+It focuses on a narrow but important workflow:
+
+- Open IFC files locally in a browser
+- Review models without accounts, plugins, or cloud upload
+- Select elements and record review comments
+- Exchange review comments as JSON
+- Support lightweight model checking by non-BIM specialists
+- Provide a future extension point for AI-assisted BIM review workflows
+
+This makes it suitable for project owners, public-sector reviewers, design offices, contractors, educators, and small organizations that need a transparent and low-barrier way to inspect BIM data.
+
+## このビューアの位置づけ
+
+IFC Review Viewer は、BIMオーサリングツールやクラウド型CDEと競合することを目的としていません。
+
+目的は、次のような限定された、しかし実務上重要なレビュー作業を簡単にすることです。
+
+- IFCをブラウザだけでローカル表示する
+- アカウント、プラグイン、クラウドアップロードなしで確認する
+- 要素を選択し、レビューコメントを記録する
+- コメントをJSONで交換する
+- BIM専門家ではない関係者もモデル確認に参加できるようにする
+- 将来的なAI支援レビューの入口にする
+
+発注者、行政、審査機関、設計事務所、施工者、教育機関、中小組織が、BIMデータを安全かつ低負担に確認するための軽量なレビュー基盤です。
+
+## Who Is This For?
+
+- Project owners and clients who need to inspect BIM deliverables
+- Public-sector reviewers and permitting or checking organizations
+- Design offices and contractors that need lightweight internal review
+- Educators who need an inspectable IFC teaching tool
+- Small organizations that cannot assume every reviewer has BIM authoring software
+
 ## Features
 
 - Load IFC files directly in the browser
@@ -126,6 +164,6 @@ IFC material colors are shown when they are exported into the IFC file as style/
 
 ## License
 
-MIT. See `LICENSE`.
+This project is MIT licensed. See `LICENSE`.
 
-Third-party runtime notices are listed in `THIRD_PARTY_NOTICES.md`.
+Bundled third-party components are distributed under their respective licenses. In particular, `web-ifc` is MPL-2.0. Third-party runtime notices are listed in `THIRD_PARTY_NOTICES.md`.
