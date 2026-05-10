@@ -46,6 +46,12 @@ The project is intentionally limited to browser code: no desktop plugin, protoco
 - **No lock-in**: 特定のクラウド、アカウント、専用サーバーを必須にしません。
 - **Review-oriented**: 単なる閲覧ではなく、要素に対する確認・指摘・合意形成を重視します。
 
+## ISO 19650 Position
+
+本ビューアは CDE（Common Data Environment）そのものではなく、単体で ISO 19650 適合を保証するものではありません。組織またはプロジェクトの ISO 19650 情報管理プロセスの中で、IFC確認・レビューを支援するツールとして利用することを想定しています。
+
+This viewer is not a Common Data Environment (CDE) and does not by itself certify ISO 19650 compliance. It is intended to support IFC review within an organization's ISO 19650 information management process.
+
 ## Quick Start
 
 ### Serverless Use
