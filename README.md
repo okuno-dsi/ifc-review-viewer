@@ -43,7 +43,15 @@ The following internal review-package functions are not part of this OpenBIM edi
 
 ## Quick Start
 
-Open `IFCReviewViewer_Standalone.html` directly in a modern browser, or run the development page:
+For normal use, no web server is required. Open this file directly in a modern browser:
+
+```text
+IFCReviewViewer_Standalone.html
+```
+
+The standalone file embeds the viewer bundle and IFC runtime so it can be launched by double-clicking the HTML file.
+
+For development, run the module-based `index.html` page through a local dev server:
 
 ```bash
 npm install
@@ -52,7 +60,9 @@ npm run dev
 
 Then open `http://127.0.0.1:8080/`.
 
-For distribution, use:
+`index.html` is intended for development. Because it uses browser ES modules, direct `file://` loading is not reliable across browsers.
+
+For distribution, use the standalone file in:
 
 ```text
 DISTRIBUTABLE_PACKAGE/IFCReviewViewer_Standalone.html
