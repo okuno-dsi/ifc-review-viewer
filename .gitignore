@@ -35,6 +35,7 @@ dist/
 # Do not publish copyrighted model data in the source repository.
 *.ifc
 *.ifczip
+*.stb
 *.rvt
 *.rfa
 *.rte
@@ -57,3 +58,5 @@ dist/
 # Local review exports
 *-comments.json
 *-review.ifc
+ifc-review-view-state.json
+DISTRIBUTABLE_PACKAGE/ST_BRIDGE/*.xml

@@ -1,17 +1,21 @@
 {
-  "name": "ifc-review-viewer",
-  "version": "0.1.0",
-  "description": "A browser-only WebGL IFC viewer and review tool.",
+  "name": "ifc-review-viewer-advanced",
+  "version": "0.2.0-openbim",
+  "description": "An OpenBIM-only browser WebGL viewer and review tool for IFC and ST-Bridge files.",
   "license": "MIT",
   "type": "module",
   "scripts": {
     "dev": "http-server . -p 8080 -c-1",
+    "check": "node --check app.js",
+    "check:publish": "node scripts/check-publish-files.mjs",
     "build": "npm run build:vendor && npm run build:standalone",
     "build:vendor": "node scripts/build-vendor.mjs",
     "build:standalone": "node scripts/build-standalone.mjs"
   },
   "keywords": [
     "ifc",
+    "st-bridge",
+    "openbim",
     "bim",
     "webgl",
     "viewer",

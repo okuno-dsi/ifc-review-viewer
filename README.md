@@ -1,108 +1,49 @@
-# IFC Review Viewer
+# IFC Review Viewer Advanced
 
-ブラウザだけで IFC を開き、BIM モデルを確認し、要素単位でレビューできるオープンソースビューアです。
+IFC Review Viewer Advanced is an OpenBIM-only version of the browser BIM review viewer.
 
-このプロジェクトの目的は **BIM ビューワの民主化** です。高価な専用環境や特定ベンダー製品に依存せず、発注者、行政、地方自治体、設計事務所、施工者、維持管理者、教育機関、個人事務所が、同じ IFC データを安全に確認できる状態を目指します。
+It is intentionally limited to public, redistributable model formats:
 
-IFC Review Viewer is a browser-only WebGL IFC viewer and lightweight review tool. It opens local `.ifc` files, lets reviewers select model elements, inspect basic IFC properties, write element, whole-building, and department/area comments, highlight commented elements, and exchange comments as JSON.
+- IFC `.ifc`
+- ST-Bridge `.stb`
+- ST-Bridge XML `.xml`
 
-The project is intentionally limited to browser code: no desktop plugin, protocol bridge, server backend, account system, or cloud dependency is required.
+This folder does not include converted Revit package data, Revit-derived scene JSON, RVT files, MCP interfaces, A2A gateway UI, server APIs, account systems, or cloud upload workflows.
 
-## Why This Exists
+## Screenshots
 
-日本で BIM を進めるには、BIM データを「作る人」だけでなく「確認する人」が安心して使えるビューアが必要です。IFC はその入口として最も中立的で、検証しやすく、公開しやすい形式です。
+![IFC Review Viewer Advanced workspace](docs/screenshots/ss01.png)
 
-このビューアは、まず IFC ビューアとして公開し、次の価値を社会に示すことを狙います。
+![IFC Review Viewer Advanced review tools](docs/screenshots/ss02.png)
 
-- データを外部サーバーへ送らず、手元のブラウザで確認できる
-- オープンソースとして動作を検証できる
-- 要素、建物全体、部門・範囲のレビュー記録を JSON として交換できる
-- 特定の商用ソフトを持たない関係者も BIM レビューへ参加できる
-- 将来的に、IFC 以外の変換済み BIM 表示データも同じレビュー体験で扱える
+## Purpose
 
-## What Makes This Different
+この派生版は、内部評価用ビューアから Revit データ依存と内部連携機能を取り除き、公開可能な IFC / ST-Bridge 専用ビューアとして整理したものです。
 
-IFC Review Viewer is not intended to compete with full BIM authoring tools or cloud-based CDE platforms.
+目的は、既存の IFC Review Viewer の上位版に見える形で、次の実務機能を提供することです。
 
-It focuses on a narrow but important workflow:
+- ブラウザだけで IFC と ST-Bridge を読み込む
+- 複数モデルを重ねて表示する
+- IFC / ST-Bridge ごとに表示、色、透明度、座標補正を調整する
+- カテゴリ別、レベル別に表示を切り替える
+- クリッピング、属性色分け、スペース表示、室内視点移動、計測、コメント、視点復元を行う
+- 要素、建物全体、部門・範囲に対するレビューコメントを JSON で交換する
+- 指摘を Findings として記録し、BCFZIP として書き出す
 
-- Open IFC files locally in a browser
-- Review models without accounts, plugins, or cloud upload
-- Select elements and record review comments
-- Exchange review comments as JSON
-- Support lightweight model checking by non-BIM specialists
-- Provide a future extension point for AI-assisted BIM review workflows
+## What Was Removed
 
-This makes it suitable for project owners, public-sector reviewers, design offices, contractors, educators, and small organizations that need a transparent and low-barrier way to inspect BIM data.
+The following internal review-package functions are not part of this OpenBIM edition:
 
-## このビューアの位置づけ
-
-IFC Review Viewer は、BIMオーサリングツールやクラウド型CDEと競合することを目的としていません。
-
-目的は、次のような限定された、しかし実務上重要なレビュー作業を簡単にすることです。
-
-- IFCをブラウザだけでローカル表示する
-- アカウント、プラグイン、クラウドアップロードなしで確認する
-- 要素を選択し、レビューコメントを記録する
-- コメントをJSONで交換する
-- BIM専門家ではない関係者もモデル確認に参加できるようにする
-- 将来的なAI支援レビューの入口にする
-
-発注者、行政、審査機関、設計事務所、施工者、教育機関、中小組織が、BIMデータを安全かつ低負担に確認するための軽量なレビュー基盤です。
-
-## Who Is This For?
-
-- Project owners and clients who need to inspect BIM deliverables
-- Public-sector reviewers and permitting or checking organizations
-- Design offices and contractors that need lightweight internal review
-- Educators who need an inspectable IFC teaching tool
-- Small organizations that cannot assume every reviewer has BIM authoring software
-
-## Features
-
-- Load IFC files directly in the browser
-- Load multiple IFC files into the same WebGL scene
-- Orbit, pan, zoom, and fit the model
-- Toggle model visibility by loaded IFC file
-- Toggle element visibility by IFC category/type
-- Toggle element visibility by building storey when `IfcBuildingStorey` data is available
-- Show a generated reference grid and level guide lines
-- Use a mouse-resizable clipping box with numeric rotation or a simple clipping section plane
-- Keep selected element information in a floating pane and open other panes as pop-outs
-- Click an element to inspect IFC type, Express ID, GlobalId, name, tag, and other available properties
-- Save comments against selected elements, the whole IFC model, or a department/area
-- Show comments for the selected element and across the whole model
-- Highlight elements that have comments
-- Export and import review comments as JSON
-- Run as a single standalone HTML file by opening it directly
-
-## Public Trust Principles
-
-- **Local-first**: IFC ファイルとコメントは原則として利用者の端末内で扱います。
-- **Transparent**: 表示・レビュー・保存の仕組みを公開ソースで確認できます。
-- **Open format first**: IFC と JSON を基本にし、長期保存と相互運用性を優先します。
-- **No lock-in**: 特定のクラウド、アカウント、専用サーバーを必須にしません。
-- **Review-oriented**: 単なる閲覧ではなく、要素に対する確認・指摘・合意形成を重視します。
-
-## ISO 19650 Position
-
-本ビューアは CDE（Common Data Environment）そのものではなく、単体で ISO 19650 適合を保証するものではありません。組織またはプロジェクトの ISO 19650 情報管理プロセスの中で、IFC確認・レビューを支援するツールとして利用することを想定しています。
-
-This viewer is not a Common Data Environment (CDE) and does not by itself certify ISO 19650 compliance. It is intended to support IFC review within an organization's ISO 19650 information management process.
+- converted Revit scene data such as `scene.json`, `attributes.json`, and `package-data.js`
+- Revit package manifests and link-package manifests
+- RVT / RFA / DWG / PDF / Office project files
+- internal review return queues and owner write tokens
+- MCP, A2A, or specialist-agent gateway interfaces
+- Review Hub HTTP server endpoints
 
 ## Quick Start
 
-### Serverless Use
-
-Open `IFCReviewViewer_Standalone.html` directly in a modern browser and choose an IFC file.
-
-This public repository does not include IFC model files. Use your own IFC files, or add only files whose redistribution has been approved by the project owner.
-
-Comments are saved in browser local storage for the same browser/profile. Use `コメント書出` and `コメント読込` to share or back up review comments.
-
-Use `コメント埋込IFC書出` to download a copy of the active IFC with the viewer's review comments embedded. Browsers cannot overwrite the original local IFC file directly, so the original remains untouched.
-
-### Development Server
+Open `IFCReviewViewer_Standalone.html` directly in a modern browser, or run the development page:
 
 ```bash
 npm install
@@ -111,6 +52,34 @@ npm run dev
 
 Then open `http://127.0.0.1:8080/`.
 
+For distribution, use:
+
+```text
+DISTRIBUTABLE_PACKAGE/IFCReviewViewer_Standalone.html
+```
+
+## Model File Locations
+
+Main IFC files:
+
+```text
+DISTRIBUTABLE_PACKAGE/IFC/
+```
+
+Linked or discipline-specific IFC files:
+
+```text
+DISTRIBUTABLE_PACKAGE/IFC/IFC_LINK/
+```
+
+ST-Bridge files:
+
+```text
+DISTRIBUTABLE_PACKAGE/ST_BRIDGE/
+```
+
+Browsers cannot automatically scan these folders from a normal local HTML file. Select each IFC or ST-Bridge file from the viewer UI.
+
 ## Build
 
 ```bash
@@ -118,52 +87,32 @@ npm install
 npm run build
 ```
 
-`npm run build` rebuilds:
+The build recreates:
 
 - `vendor/ifc-runtime.js`
-- `vendor/web-ifc.wasm`
 - `IFCReviewViewer_Standalone.html`
 
-## Project Structure
+After building, copy the standalone file into `DISTRIBUTABLE_PACKAGE/` before packaging.
 
-- `index.html`: modular browser entry
-- `app.js`: viewer and reviewer application logic
-- `styles.css`: UI styling
-- `vendor/`: bundled IFC/WebGL runtime used by the modular entry
-- `IFCReviewViewer_Standalone.html`: one-file, serverless distribution
-- `scripts/`: build scripts
+## GitHub Publication Checks
 
-## Distributable Package
+Before publishing, run:
 
-Files that can be handed to reviewers are collected here:
+```bash
+npm ci
+npm run check
+npm run check:publish
+npm audit --audit-level=high
+npm run build
+```
 
-- `DISTRIBUTABLE_PACKAGE/IFCReviewViewer_Standalone.html`: standalone viewer
-- `DISTRIBUTABLE_PACKAGE/IFC/`: placeholder folder for approved main IFC files
-- `DISTRIBUTABLE_PACKAGE/IFC/IFC_LINK/`: placeholder folder for approved linked or discipline-specific IFC files
-- `DISTRIBUTABLE_PACKAGE/LICENSE`: viewer license
-- `DISTRIBUTABLE_PACKAGE/THIRD_PARTY_NOTICES.md`: third-party notices
+`npm run check:publish` fails if IFC, ST-Bridge, Revit, DWG, PDF, Office, archive, or XML project data files are present in the repository tree. Release ZIP files are intentionally kept out of Git and should be attached to GitHub Releases instead.
 
-IFC files are intentionally ignored by Git. Open the main IFC first, then add the linked IFC files from `IFC_LINK` when a federated review is needed.
+Suggested release assets:
 
-## Roadmap
-
-The public core will remain a simple, inspectable IFC viewer and reviewer. Extensions should be added in a way that keeps the core trustworthy.
-
-- IFC property panels and search workflows
-- Comment grouping, issue status, and review session summaries
-- Open review exchange formats after the public core is stable
-- Optional adapters for converted BIM display data, including data converted from authoring tools
-- Public sample models and repeatable verification tests
-- Accessibility, Japanese public-sector documentation, and deployment guides
-
-## Notes
-
-The standalone file is intentionally large because it embeds the JavaScript runtime and `web-ifc.wasm`. This avoids browser `file://` restrictions and lets the viewer run by double-clicking the HTML file.
-
-IFC material colors are shown when they are exported into the IFC file as style/material information. Some IFC exports contain rich surface colors, while others contain only geometry and basic object data.
+- `IFCReviewViewer_Standalone.html`
+- `DISTRIBUTABLE_PACKAGE_OpenBIM_Advanced_v0.2.0.zip`
 
 ## License
 
-This project is MIT licensed. See `LICENSE`.
-
-Bundled third-party components are distributed under their respective licenses. In particular, `web-ifc` is MPL-2.0. Third-party runtime notices are listed in `THIRD_PARTY_NOTICES.md`.
+This project is MIT licensed. Bundled third-party runtime components remain under their respective licenses, especially `web-ifc` under MPL-2.0. See `THIRD_PARTY_NOTICES.md`.
