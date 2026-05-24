@@ -44,7 +44,7 @@ Recommended workflow:
 3. Use the pop-out category, level, and clipping controls to inspect the model.
 4. Review elements, the whole loaded model, or departments/areas and write comments in the browser.
 5. Export comments or view states as JSON when sharing review results.
-6. Use `コメント埋込IFC書出` when a review IFC copy with embedded comments is needed. The browser downloads a new IFC file and does not overwrite the original.
+6. Use `Export Commented IFC` when a review IFC copy with embedded comments is needed. The browser downloads a new IFC file and does not overwrite the original.
 
 IFC colors are displayed when the IFC file includes exported material/style information.
 ST-Bridge files are displayed as simplified structural geometry for review: columns, beams, braces, slabs, walls, footings, and piles are generated from the public XML data.

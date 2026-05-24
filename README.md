@@ -18,17 +18,17 @@ This folder does not include converted Revit package data, Revit-derived scene J
 
 ## Purpose
 
-この派生版は、内部評価用ビューアから Revit データ依存と内部連携機能を取り除き、公開可能な IFC / ST-Bridge 専用ビューアとして整理したものです。
+This edition removes Revit-dependent data and internal integration features from the internal review viewer, and repackages the result as a public, redistributable IFC / ST-Bridge viewer.
 
-目的は、既存の IFC Review Viewer の上位版に見える形で、次の実務機能を提供することです。
+It is intended to provide practical review functions while remaining an OpenBIM-only, vendor-neutral tool:
 
-- ブラウザだけで IFC と ST-Bridge を読み込む
-- 複数モデルを重ねて表示する
-- IFC / ST-Bridge ごとに表示、色、透明度、座標補正を調整する
-- カテゴリ別、レベル別に表示を切り替える
-- クリッピング、属性色分け、スペース表示、室内視点移動、計測、コメント、視点復元を行う
-- 要素、建物全体、部門・範囲に対するレビューコメントを JSON で交換する
-- 指摘を Findings として記録し、BCFZIP として書き出す
+- Open IFC and ST-Bridge files directly in the browser
+- Overlay multiple models
+- Adjust visibility, colors, opacity, and coordinate offsets per IFC / ST-Bridge file
+- Control visibility by category and level
+- Use clipping, attribute-based coloring, space display, room-eye navigation, measurement, comments, and view restoration
+- Exchange review comments for elements, whole models, and departments or areas as JSON
+- Record review findings and export them as BCFZIP
 
 ## What Was Removed
 

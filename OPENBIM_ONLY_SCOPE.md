@@ -1,8 +1,8 @@
 # OpenBIM-Only Scope
 
-このフォルダは、内部評価用ビューアを公開可能な一般解へ寄せるための作業コピーです。
+This folder is a public OpenBIM-oriented working copy derived from the internal review viewer.
 
-含めるもの:
+Included:
 
 - IFC viewer and reviewer
 - ST-Bridge structural viewer
@@ -10,7 +10,7 @@
 - view state import/export
 - clipping, measurement, model/category/level visibility
 
-含めないもの:
+Not included:
 
 - Revit package data
 - converted Revit geometry or attribute JSON
@@ -19,4 +19,4 @@
 - MCP or A2A gateway UI
 - private project sample files
 
-公開前チェックでは、`.ifc`, `.stb`, `.rvt`, `.rfa`, `.dwg`, `.dxf`, `.pdf`, Office files, archives, and ST-Bridge XML model files must not be tracked unless they are explicitly approved public samples.
+Before publication, `.ifc`, `.stb`, `.rvt`, `.rfa`, `.dwg`, `.dxf`, `.pdf`, Office files, archives, and ST-Bridge XML model files must not be tracked unless they are explicitly approved public samples.
